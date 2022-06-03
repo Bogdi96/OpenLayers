@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Open Layers test #4 </title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
+  </head>
+  
+  <body>
+    <h1>Open Layers test 4</h1>
+    
+    <div id="map" class="map"></div>
+    <p id="info"></p>
+
+    <script type="text/javascript">
+      console.log("Inizio script...");
+
+      const styles = [
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'green',
+            width: 3,
+          }),
+          fill: new ol.style.Fill({
+            color: 'rgba(0, 255, 0, 0.1)',
+          }),
+        }),
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 10,
+            fill: new ol.style.Fill({
+              color: 'purple',
+            }),
+          }),
+          geometry: function (feature) {
+            // return the coordinates of the first ring of the polygon
+            const coordinates = feature.getGeometry().getCoordinates()[0];
+            return new ol.geom.MultiPoint(coordinates);
+          },
+        }),
+      ];
+
+      const geojsonObject = {
+        'type': 'FeatureCollection',
+        'crs': {
+          'type': 'name',
+          'properties': {
+            'name': 'EPSG:3857',
+          },
+        },
+        'features': [
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': [
+                [
+                  [-5e6, 6e6],
+                  [-5e6, 8e6],
+                  [-3e6, 8e6],
+                  [-3e6, 6e6],
+                  [-5e6, 6e6],
+                ],
+              ],
+            },
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': [
+                [
+                  [-2e6, 6e6],
+                  [-2e6, 8e6],
+                  [0, 8e6],
+                  [0, 6e6],
+                  [-2e6, 6e6],
+                ],
+              ],
+            },
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': [
+                [
+                  [1e6, 6e6],
+                  [1e6, 8e6],
+                  [3e6, 8e6],
+                  [3e6, 6e6],
+                  [1e6, 6e6],
+                ],
+              ],
+            },
+          },
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Polygon',
+              'coordinates': [
+                [
+                  [-2e6, -1e6],
+                  [-1e6, 1e6],
+                  [0, -1e6],
+                ],
+              ],
+            },
+          },
+        ],
+      };
+
+      const source = new ol.source.Vector({
+        features: new ol.format.GeoJSON().readFeatures(geojsonObject),
+      });
+
+      const layer = new ol.layer.Vector({
+        source: source,
+        style: styles,
+      });
+
+      const map = new ol.Map({
+        layers: [layer],
+        target: 'map',
+        view: new ol.View({
+          center: [0, 3000000],
+          zoom: 2,
+        }),
+      });
+
+
+    </script>
+
+  </body>
+  
+</html>
