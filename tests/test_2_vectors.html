@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Open Layers test #1 </title>
+    <title>Open Layers test #2 </title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
     <style>
@@ -15,7 +15,7 @@
   </head>
   
   <body>
-    <h1>Open Layers test 1</h1>
+    <h1>Open Layers test 2</h1>
     
     <div id="map" class="map"></div>
     <script type="text/javascript">
@@ -37,6 +37,8 @@
           format: new ol.format.GeoJSON(),
         }),
         style: function (feature) {
+          console.log("feature : ", feature);
+          console.log("feature.get('COLOR') : ", feature.get('COLOR'));
           const color = feature.get('COLOR') || '#eeeeee';
           style.getFill().setColor(color);
           return style;

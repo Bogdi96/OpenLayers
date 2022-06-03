@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Open Layers test #1 </title>
+    <title>Open Layers test #3 </title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
     <style>
       .map {
-        width: 90%;
+        width: 95%;
         height:600px;
         margin: auto;
       }
@@ -15,9 +15,11 @@
   </head>
   
   <body>
-    <h1>Open Layers test 1</h1>
+    <h1>Open Layers test 3</h1>
     
     <div id="map" class="map"></div>
+    <p id="info"></p>
+
     <script type="text/javascript">
       console.log("Inizio script...");
 
@@ -28,16 +30,17 @@
         }),
       });
 
-
+// url: 'https://raw.githubusercontent.com/Bogdi96/OpenLayers/85370ab526d05f9d07eb075ff32fac42dfcf9a02/tests/geoJSON/map.geojson',
       // --- VECTOR LAYER ---
       const vectorLayer = new ol.layer.Vector({
-        background: '#1a2b39',
         source: new ol.source.Vector({
-          url: './geoJSON/map.geojson',
+          url: 'https://raw.githubusercontent.com/Bogdi96/OpenLayers/main/tests/geoJSON/map.geojson',
           format: new ol.format.GeoJSON(),
         }),
         style: function (feature) {
-          const color = feature.get('COLOR') || '#eeeeee';
+          console.log("feature : ", feature);
+          console.log("feature.get('fill') : ", feature.get('fill'));
+          const color = feature.get('fill') || '#eeeeee';
           style.getFill().setColor(color);
           return style;
         },
@@ -81,12 +84,16 @@
           return feature;
         });
 
-        // const info = document.getElementById('info');
-        // if (feature) {
-        //   info.innerHTML = feature.get('ECO_NAME') || '&nbsp;';
-        // } else {
-        //   info.innerHTML = '&nbsp;';
-        // }
+        if(feature){
+          console.log("feature : ", feature);
+          console.log("feature.get('title') : ", feature.get('title'));
+        }
+        const info = document.getElementById('info');
+        if (feature) {
+          info.innerHTML = feature.get('title') || '&nbsp;';
+        } else {
+          info.innerHTML = '&nbsp;';
+        }
 
         if (feature !== highlight) {
           if (highlight) {
