@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Open Layers test #1 </title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/css/ol.css" type="text/css">
+    <style>
+      .map {
+        width: 90%;
+        height:600px;
+        margin: auto;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"></script>
+  </head>
+  
+  <body>
+    <h1>Open Layers test 1</h1>
+    
+    <div id="map" class="map"></div>
+    <script type="text/javascript">
+      console.log("Inizio script...");
+
+      
+      const style = new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: '#eeeeee',
+        }),
+      });
+
+
+      // --- VECTOR LAYER ---
+      const vectorLayer = new ol.layer.Vector({
+        background: '#1a2b39',
+        source: new ol.source.Vector({
+          url: 'https://openlayers.org/data/vector/ecoregions.json',
+          format: new ol.format.GeoJSON(),
+        }),
+        style: function (feature) {
+          const color = feature.get('COLOR') || '#eeeeee';
+          style.getFill().setColor(color);
+          return style;
+        },
+        opacity: 0.4
+      });
+
+
+      // --- MAPPA ---
+      var map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([10.792661, 45.159554]),
+          zoom: 19
+        })
+      });
+
+
+      // --- FEATURE OVERLAY ---
+      const featureOverlay = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        map: map,
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'rgba(255, 255, 255, 0.7)',
+            width: 2,
+          }),
+        }),
+      });
+
+
+      // --- HIGHLIGHT ---
+      let highlight;
+      const displayFeatureInfo = function (pixel) {
+        const feature = map.forEachFeatureAtPixel(pixel, function (feature) {
+          return feature;
+        });
+
+        // const info = document.getElementById('info');
+        // if (feature) {
+        //   info.innerHTML = feature.get('ECO_NAME') || '&nbsp;';
+        // } else {
+        //   info.innerHTML = '&nbsp;';
+        // }
+
+        if (feature !== highlight) {
+          if (highlight) {
+            featureOverlay.getSource().removeFeature(highlight);
+          }
+          if (feature) {
+            featureOverlay.getSource().addFeature(feature);
+          }
+          highlight = feature;
+        }
+      };
+
+
+      // --- EVENT LISTENERS ---
+      map.on('pointermove', function (evt) {
+        if (evt.dragging) {
+          return;
+        }
+        const pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+      });
+
+      map.on('click', function (evt) {
+        displayFeatureInfo(evt.pixel);
+      });
+
+    </script>
+
+  </body>
+  
+</html>

@@ -1,0 +1,43 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "stroke": "#ffffff",
+        "stroke-width": 5,
+        "stroke-opacity": 0.7,
+        "fill": "#00ff11",
+        "fill-opacity": 0.4,
+        "title": "Casa di Fede"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              10.792691744863987,
+              45.15955017859196
+            ],
+            [
+              10.792728289961815,
+              45.15949911294533
+            ],
+            [
+              10.792852006852627,
+              45.15955159708148
+            ],
+            [
+              10.792806074023247,
+              45.15959958928977
+            ],
+            [
+              10.792691744863987,
+              45.15955017859196
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
